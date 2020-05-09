@@ -73,18 +73,47 @@ class CMain{
 		System.out.println("Enter Employee ID to be removed:");
 		sc = new Scanner(System.in);
 		String empid = sc.nextLine();
-		if (DWEmployee.findEmp(empid))
+		if (DWEmployee.findEmp(empid) != null)
 			
 			{  DWEmployee.rmEmp(empid); System.out.println("DONE\n");}
 		 
-		else if (SalaryEmployee.findEmp(empid))
+		else if (SalaryEmployee.findEmp(empid) != null)
 			{ SalaryEmployee.rmEmp(empid); System.out.println("DONE\n"); }
 		
-		else if (SalesEmployee.findEmp(empid))
+		else if (SalesEmployee.findEmp(empid)!= null)
 			{ SalesEmployee.rmEmp(empid); System.out.println("DONE\n"); }
 		else
 			{ System.out.println("INVALID EMPLOYEE ID\n");}
 		
+		
+	}
+	
+	private static void postTimeCard()
+	{
+		System.out.println("Enter Employee ID :");
+		sc = new Scanner(System.in);
+		String empid = sc.nextLine();
+		DWEmployee x = DWEmployee.findEmp(empid);
+		if (x != null)
+		{
+			System.out.println("Enter Hours Worked :");
+			sc = new Scanner(System.in);
+			int hrs = sc.nextInt();
+			
+			if (hrs > 24 || hrs < 0)
+				System.out.println("Invalid Hour Range aborting...");
+            else 
+			{
+				float amount = x.dailyWage(hrs);
+				
+				x.dailyWageUpdate(amount,'D');
+				System.out.println("Done\n");
+			}				
+
+		}
+		
+		else
+			{ System.out.println("INVALID EMPLOYEE ID\n");}
 		
 	}
 	public static void main(String [] args)
@@ -109,7 +138,7 @@ class CMain{
 			{
 				case 1 : addEmp();break;
 				case 2 : rmEmp();break;
-				case 3 : break;
+				case 3 : postTimeCard();break;
 				case 4 : break;
 				case 5 : break;
 				case 6 : break;

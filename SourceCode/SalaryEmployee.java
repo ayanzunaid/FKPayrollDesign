@@ -11,6 +11,13 @@ class SalaryEmployee extends Employee
 		this.last_mtr_date = null;
 	}
 	
+	SalaryEmployee(String emp_id,byte mem_union,float uwr,char pay_met , float sl , Date last_mtr_date)
+	{
+		super(emp_id, mem_union, uwr,pay_met);
+		this.sl = sl;
+		this.last_mtr_date = last_mtr_date;
+	}
+	
 	void writeToDb()
 	{
 		try{  
@@ -40,8 +47,8 @@ class SalaryEmployee extends Employee
 	}
 	
 	
-	static boolean findEmp(String empid)
-	{  boolean re = false;
+	static SalaryEmployee findEmp(String empid)
+	{  
 		try{  
 		  
 		Connection con=DriverManager.getConnection(  
@@ -50,10 +57,15 @@ class SalaryEmployee extends Employee
 		Statement stmt=con.createStatement();  
 		ResultSet rs=stmt.executeQuery("select * from salaryemployee where emp_id = '" + empid + "'");  
 		 
-		re =  rs.next();  
+		 
+		if (!rs.next() )
+            return null;
+        SalaryEmployee x = new SalaryEmployee(rs.getString("emp_id"),rs.getBoolean("union_member") == true ?(byte) 1 :(byte) 0,rs.getFloat("union_week_rate")
+		                    ,rs.getString("payment_method").charAt(0) , rs.getFloat("salary") , rs.getDate("last_mtr_date"));		
 		con.close();  
-		}catch(Exception e){ System.out.println(e);}  
-		return re;
+		return x;
+		}catch(Exception e){ System.out.println(e); return null;}  
+		
 	}
 	
 	

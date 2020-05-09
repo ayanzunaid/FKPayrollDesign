@@ -11,6 +11,22 @@ class DWEmployee extends Employee
 		this.last_tr_date = null;
 	}
 	
+	DWEmployee(String emp_id,byte mem_union,float uwr,char pay_met , float hr , Date last_tr_date)
+	{
+		super(emp_id, mem_union, uwr,pay_met);
+		this.hr = hr;
+		this.last_tr_date = last_tr_date;
+	}
+	
+	float dailyWage(int hrs)
+	{
+		 
+		 if (hrs <= 8)
+			   return ((float)hrs)*this.hr;
+		 return (1.5f*((float)(hrs-8))*this.hr )  + 8.0f*this.hr ;
+		 
+	}
+	
 	void writeToDb()
 	{
 		try{  
@@ -38,8 +54,8 @@ class DWEmployee extends Employee
 		
 	}
 	
-	static boolean findEmp(String empid)
-	{  boolean re = false;
+	static DWEmployee findEmp(String empid)
+	{  
 		try{  
 		  
 		Connection con=DriverManager.getConnection(  
@@ -48,10 +64,16 @@ class DWEmployee extends Employee
 		Statement stmt=con.createStatement();  
 		ResultSet rs=stmt.executeQuery("select * from dailywageemployee where emp_id = '" + empid + "'");  
 		 
-		re =  rs.next();  
+		 if (!rs.next() )
+            return null;
+
+        DWEmployee x = new DWEmployee(rs.getString("emp_id"),rs.getBoolean("union_member") == true ? (byte)1 :(byte) 0,rs.getFloat("union_week_rate")
+		                    ,rs.getString("payment_method").charAt(0) , rs.getFloat("hour_rate") , rs.getDate("last_tr_date"));		
 		con.close();  
-		}catch(Exception e){ System.out.println(e);}  
-		return re;
+		
+		return x;
+		}catch(Exception e){ System.out.println(e); return null;}  
+		
 	}
 	
 	static void rmEmp(String empid)
