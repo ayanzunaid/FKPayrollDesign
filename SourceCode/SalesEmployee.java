@@ -40,4 +40,40 @@ class SalesEmployee extends SalaryEmployee
 			}catch(Exception e){ System.out.println(e);} 
 		
 	}
+	
+	static boolean findEmp(String empid)
+	{  boolean re = false;
+		try{  
+		  
+		Connection con=DriverManager.getConnection(  
+		"jdbc:mysql://localhost:3306/fkpayroll?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC","root","");  
+		
+		Statement stmt=con.createStatement();  
+		ResultSet rs=stmt.executeQuery("select * from salesemployee where emp_id = '" + empid + "'");  
+		 
+		re =  rs.next();  
+		con.close();  
+		}catch(Exception e){ System.out.println(e);}  
+		return re;
+	}
+	
+	static void rmEmp(String empid)
+	{   try {
+		    
+			Connection con=DriverManager.getConnection(  
+			"jdbc:mysql://localhost:3306/fkpayroll?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC","root","");
+			Statement stmt = con.createStatement();
+			String sql = "DELETE FROM salesemployee " +
+                   "WHERE emp_id = '"   + empid + "'";
+			stmt.executeUpdate(sql);
+			
+			stmt = con.createStatement();
+			String sql2 = "DELETE FROM dailywagetrans " +
+                   "WHERE emp_id = '"   + empid + "'";
+			stmt.executeUpdate(sql2);
+			
+			con.close();
+			}catch (Exception e ) { System.out.println(e);} 
+	}
+	
 }

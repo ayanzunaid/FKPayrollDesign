@@ -35,7 +35,7 @@ class CMain{
 				hr = sc.nextFloat();
 				DWEmployee emp = new DWEmployee(empid,mem,uwr,pay_met,hr );
 				emp.writeToDb();
-				System.out.println("Done");
+				System.out.println("Done\n");
 			}
 		
 		else if (emp_t == 2)
@@ -44,7 +44,7 @@ class CMain{
 				sl = sc.nextFloat();
 				SalaryEmployee emp = new SalaryEmployee(empid,mem,uwr,pay_met,sl);
 				emp.writeToDb();
-				System.out.println("Done");
+				System.out.println("Done\n");
 			}
 			
 	    else if (emp_t == 3)
@@ -55,7 +55,7 @@ class CMain{
 				cmr = sc.nextFloat();
 				SalesEmployee emp = new SalesEmployee(empid,mem,uwr,pay_met,sl,cmr);
 				emp.writeToDb();
-				System.out.println("Done");
+				System.out.println("Done\n");
 				
 		    }
 			
@@ -66,6 +66,26 @@ class CMain{
 			}
 			
 			
+	}
+	
+	private static void rmEmp()
+	{
+		System.out.println("Enter Employee ID to be removed:");
+		sc = new Scanner(System.in);
+		String empid = sc.nextLine();
+		if (DWEmployee.findEmp(empid))
+			
+			{  DWEmployee.rmEmp(empid); System.out.println("DONE\n");}
+		 
+		else if (SalaryEmployee.findEmp(empid))
+			{ SalaryEmployee.rmEmp(empid); System.out.println("DONE\n"); }
+		
+		else if (SalesEmployee.findEmp(empid))
+			{ SalesEmployee.rmEmp(empid); System.out.println("DONE\n"); }
+		else
+			{ System.out.println("INVALID EMPLOYEE ID\n");}
+		
+		
 	}
 	public static void main(String [] args)
 	{
@@ -88,7 +108,7 @@ class CMain{
 			switch (ch)
 			{
 				case 1 : addEmp();break;
-				case 2 : break;
+				case 2 : rmEmp();break;
 				case 3 : break;
 				case 4 : break;
 				case 5 : break;
