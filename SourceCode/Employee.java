@@ -21,6 +21,56 @@ class Employee
 		return mem_union == 1 ? true : false;
 	}
 	
+	void updatePay(char pmx , String name)
+	{
+		this.pay_met = pmx;
+		try {
+		    
+			Connection con=DriverManager.getConnection(  
+			"jdbc:mysql://localhost:3306/fkpayroll?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC","root","");
+			Statement stmt = con.createStatement();
+			String sql = "UPDATE " + name + "  SET payment_method = '" + Character.toString(pmx) +
+                   "' WHERE emp_id = '"   + emp_id + "'";
+			stmt.executeUpdate(sql);
+			
+			
+			con.close();
+			}catch (Exception e ) { System.out.println(e);} 
+		
+	}
+	
+	
+	void updateMember(int mx , float uwrx , String name)
+	{
+		if (mx == 0 )
+		{
+			 this.mem_union = 0;
+			 this.uwr = 0.0f;
+		}
+		
+		else
+		{
+			this.mem_union = 1;
+			this.uwr = uwrx;
+		}
+		
+		
+		try {
+		    
+			Connection con=DriverManager.getConnection(  
+			"jdbc:mysql://localhost:3306/fkpayroll?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC","root","");
+			Statement stmt = con.createStatement();
+			String sql = "UPDATE " + name + "  SET union_member = " + this.mem_union +
+                   " , union_week_rate = " +this.uwr + " WHERE emp_id = '"   + emp_id + "'";
+			stmt.executeUpdate(sql);
+			
+			
+			con.close();
+			}catch (Exception e ) { System.out.println(e);} 
+		
+	}
+	
+	
 	void dailyWageUpdate(float amt , char type)
 	{
 		

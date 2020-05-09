@@ -93,4 +93,23 @@ class SalesEmployee extends SalaryEmployee
 			}catch (Exception e ) { System.out.println(e);} 
 	}
 	
+	
+	void updateComm(float cmrx)
+	{
+		this.cmr = cmrx;
+		try {
+		    
+			Connection con=DriverManager.getConnection(  
+			"jdbc:mysql://localhost:3306/fkpayroll?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC","root","");
+			Statement stmt = con.createStatement();
+			String sql = "UPDATE salesemployee  SET comm_rate = " +cmrx +
+                   "WHERE emp_id = '"   + emp_id + "'";
+			stmt.executeUpdate(sql);
+			
+			
+			con.close();
+			}catch (Exception e ) { System.out.println(e);} 
+		
+	}
+	
 }

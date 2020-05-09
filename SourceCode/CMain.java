@@ -224,6 +224,166 @@ class CMain{
 			{ System.out.println("INVALID EMPLOYEE ID\n");}
 	}
 	
+	
+	
+	private static void editDetails()
+	{
+		
+		System.out.println("Enter Employee ID :");
+		sc = new Scanner(System.in);
+		String empid = sc.nextLine();
+		
+		DWEmployee x = DWEmployee.findEmp(empid);
+		SalaryEmployee y = SalaryEmployee.findEmp(empid);
+		SalesEmployee z = SalesEmployee.findEmp(empid);
+		
+		if (x != null)
+			
+			{ 
+			   System.out.println("1. Hour Rate 2.Payment Method");
+			   if (x.isUnionMember() )
+			   {
+				   System.out.println(" 3. Leave Union 4.Union Due Rate");
+				   
+			   }
+			   else 
+			   {
+				    System.out.println(" 3. Join Union");
+			   }
+			   
+			   sc = new Scanner(System.in);
+			   int ch = sc.nextInt();
+			   if (ch == 1)
+			   {   System.out.println("Enter new Hour Rate : ");
+				   sc = new Scanner(System.in);
+				   float hrx = sc.nextFloat();
+				   x.updateHourRate(hrx);
+			   }
+		       else if (ch == 2) {
+				   System.out.println("1. postal address 2. paymaster 3.bank account ");
+		            sc = new Scanner(System.in);
+					int pmx = sc.nextInt();
+					char pay_metx = (pmx == 1) ? 'A' : (pmx == 2)? 'P' : 'B' ;
+				    x.updatePay(pay_metx , "dailywageemployee");
+			   }
+			   else if  ( ch==3 && x.isUnionMember())
+			       {
+					   x.updateMember(0 , 0.0f , "dailywageemployee");
+				   }
+				
+		       else if ((ch == 4 && x.isUnionMember()) || (ch == 3 && !x.isUnionMember()))
+			       {
+					  System.out.println("Enter new Weekly Due Rate : ");
+						sc = new Scanner(System.in);
+						float uwrx = sc.nextFloat();
+					  x.updateMember(1,uwrx,"dailywageemployee" );  
+				   }
+				else {}
+			    System.out.println("DONE\n");
+			}
+		 
+		else if (y != null)
+			{  
+		        System.out.println("1. Salary 2.Payment Method");
+			   if (y.isUnionMember() )
+			   {
+				   System.out.println(" 3. Leave Union 4.Union Due Rate");
+				   
+			   }
+			   else 
+			   {
+				    System.out.println(" 3. Join Union");
+			   }
+			   
+			   sc = new Scanner(System.in);
+			   int ch = sc.nextInt();
+			   if (ch == 1)
+			   {   System.out.println("Enter new Salary : ");
+				   sc = new Scanner(System.in);
+				   float sal = sc.nextFloat();
+				   y.updateSalary(sal , "salaryemployee");
+			   }
+		       else if (ch == 2) {
+				   System.out.println("1. postal address 2. paymaster 3.bank account ");
+		            sc = new Scanner(System.in);
+					int pmx = sc.nextInt();
+					char pay_metx = (pmx == 1) ? 'A' : (pmx == 2)? 'P' : 'B' ;
+				    y.updatePay(pay_metx , "salaryemployee");
+			   }
+			   else if  ( ch==3 && y.isUnionMember())
+			       {
+					   y.updateMember(0 , 0.0f , "salaryemployee");
+				   }
+				
+		       else if ((ch == 4 && y.isUnionMember()) || (ch == 3 && !y.isUnionMember()))
+			       {
+					  System.out.println("Enter new Weekly Due Rate : ");
+						sc = new Scanner(System.in);
+						float uwrx = sc.nextFloat();
+					  y.updateMember(1,uwrx,"salaryemployee" );  
+				   }
+				else {}
+        		System.out.println("DONE\n"); 
+				
+			}
+		
+		else if (z != null)
+			{   		        System.out.println("1. Salary 2.Payment Method");
+			   if (z.isUnionMember() )
+			   {
+				   System.out.println(" 3. Leave Union 4.Union Due Rate");
+				   
+			   }
+			   else 
+			   {
+				    System.out.println(" 3. Join Union");
+			   }
+			   
+			   System.out.println(" 5. Commission Rate");
+			   
+			   sc = new Scanner(System.in);
+			   int ch = sc.nextInt();
+			   if (ch == 1)
+			   {   System.out.println("Enter new Salary : ");
+				   sc = new Scanner(System.in);
+				   float sal = sc.nextFloat();
+				   z.updateSalary(sal, "salesemployee");
+			   }
+		       else if (ch == 2) {
+				   System.out.println("1. postal address 2. paymaster 3.bank account ");
+		            sc = new Scanner(System.in);
+					int pmx = sc.nextInt();
+					char pay_metx = (pmx == 1) ? 'A' : (pmx == 2)? 'P' : 'B' ;
+				    z.updatePay(pay_metx , "salesemployee");
+			   }
+			   else if  ( ch==3 && z.isUnionMember())
+			       {
+					   z.updateMember(0 , 0.0f , "salesemployee");
+				   }
+				
+		       else if ((ch == 4 && z.isUnionMember()) || (ch == 3 && !z.isUnionMember()))
+			       {
+					  System.out.println("Enter new Weekly Due Rate : ");
+						sc = new Scanner(System.in);
+						float uwrx = sc.nextFloat();
+					  z.updateMember(1,uwrx,"salesemployee" );  
+				   }
+			    else if (ch == 5)
+				{
+					 System.out.println("Enter new Commission Rate : ");
+				   sc = new Scanner(System.in);
+				   float cmrx = sc.nextFloat();
+				   z.updateComm(cmrx); 
+				}
+				else {}
+        		
+				
+        		System.out.println("DONE\n"); }
+		else
+			{ System.out.println("INVALID EMPLOYEE ID\n");}
+		
+        		
+	}
 	public static void main(String [] args)
 	{
 		
@@ -249,7 +409,7 @@ class CMain{
 				case 3 : postTimeCard();break;
 				case 4 : postSalesReceipt();break;
 				case 5 : postServiceCharge();break;
-				case 6 : break;
+				case 6 : editDetails();break;
 				case 7 : break;
 				
 			};

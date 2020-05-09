@@ -94,4 +94,22 @@ class DWEmployee extends Employee
 			con.close();
 			}catch (Exception e ) { System.out.println(e);} 
 	}
+	
+	void updateHourRate(float hrx)
+	{
+		this.hr = hrx;
+		try {
+		    
+			Connection con=DriverManager.getConnection(  
+			"jdbc:mysql://localhost:3306/fkpayroll?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC","root","");
+			Statement stmt = con.createStatement();
+			String sql = "UPDATE dailywageemployee  SET hour_rate = " +hrx +
+                   "WHERE emp_id = '"   + emp_id + "'";
+			stmt.executeUpdate(sql);
+			
+			
+			con.close();
+			}catch (Exception e ) { System.out.println(e);} 
+		
+	}
 }
