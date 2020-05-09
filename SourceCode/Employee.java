@@ -16,6 +16,11 @@ class Employee
 		
 	}
 	
+	boolean isUnionMember()
+	{
+		return mem_union == 1 ? true : false;
+	}
+	
 	void dailyWageUpdate(float amt , char type)
 	{
 		

@@ -129,7 +129,7 @@ class CMain{
 			sc = new Scanner(System.in);
 			float sals = sc.nextFloat();
 		
-		if (sals < 0)
+		if (sals < 0.0f)
 			 System.out.println("Invalid Amount Aborting....\n");
 		 else
 		 {
@@ -141,6 +141,87 @@ class CMain{
 		 else {
 			 System.out.println("INVALID EMPLOYEE ID\n");
 		 }
+	}
+	
+	
+	
+	private static void postServiceCharge()
+	
+	{
+		System.out.println("Enter Employee ID :");
+		sc = new Scanner(System.in);
+		String empid = sc.nextLine();
+		DWEmployee x = DWEmployee.findEmp(empid);
+		SalaryEmployee y = SalaryEmployee.findEmp(empid);
+		SalesEmployee z = SalesEmployee.findEmp(empid);
+		if (x != null)
+			
+			{  if (x.isUnionMember())
+				{
+				  System.out.println("Enter Service Charge:");
+					sc = new Scanner(System.in);
+					float sv = sc.nextFloat();
+					if (sv < 0.0f)
+					{
+						System.out.println("Invalid Amount Aborting....\n");
+					}
+					else{
+				  x.dailyWageUpdate(-1.0f*sv , 'S' );
+				  System.out.println("DONE\n");
+					}
+				}
+				
+			   else 
+			   {
+				   System.out.println("Not a Union Member\n");	 
+			   }
+			}
+		 
+		else if ( y != null)
+			{ 
+		      if (y.isUnionMember())
+				{ System.out.println("Enter Service Charge:");
+					sc = new Scanner(System.in);
+					float sv = sc.nextFloat();
+					if (sv < 0.0f)
+					{
+						System.out.println("Invalid Amount Aborting....\n");
+					}
+					else{
+				  y.dailyWageUpdate(-1.0f*sv , 'S' );
+				  System.out.println("DONE\n");
+					}				  
+				}
+				
+			   else 
+			   {
+				   System.out.println("Not a Union Member\n");	 
+			   }
+     		}
+		
+		else if (z != null)
+			{
+				if (z.isUnionMember())
+				{ System.out.println("Enter Service Charge:");
+					sc = new Scanner(System.in);
+					float sv = sc.nextFloat();
+					if (sv < 0.0f)
+					{
+						System.out.println("Invalid Amount Aborting....\n");
+					}
+					else{
+				  z.dailyWageUpdate(-1.0f*sv , 'S' );
+				  System.out.println("DONE\n");	
+					}
+				}
+				
+			   else 
+			   {
+				   System.out.println("Not a Union Member\n");	 
+			   }
+		    }
+		else
+			{ System.out.println("INVALID EMPLOYEE ID\n");}
 	}
 	
 	public static void main(String [] args)
@@ -167,7 +248,7 @@ class CMain{
 				case 2 : rmEmp();break;
 				case 3 : postTimeCard();break;
 				case 4 : postSalesReceipt();break;
-				case 5 : break;
+				case 5 : postServiceCharge();break;
 				case 6 : break;
 				case 7 : break;
 				
