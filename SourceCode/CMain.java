@@ -116,6 +116,33 @@ class CMain{
 			{ System.out.println("INVALID EMPLOYEE ID\n");}
 		
 	}
+	
+	private static void postSalesReceipt()
+	
+	{
+		System.out.println("Enter Employee ID :");
+		sc = new Scanner(System.in);
+		String empid = sc.nextLine();
+		SalesEmployee x = SalesEmployee.findEmp(empid);
+		 if (x!=null) {
+		System.out.println("Enter Sales Made:");
+			sc = new Scanner(System.in);
+			float sals = sc.nextFloat();
+		
+		if (sals < 0)
+			 System.out.println("Invalid Amount Aborting....\n");
+		 else
+		 {
+			 x.dailyWageUpdate(x.getComm(sals),'D');
+				System.out.println("Done\n");
+			 
+		 }
+		 }
+		 else {
+			 System.out.println("INVALID EMPLOYEE ID\n");
+		 }
+	}
+	
 	public static void main(String [] args)
 	{
 		
@@ -139,7 +166,7 @@ class CMain{
 				case 1 : addEmp();break;
 				case 2 : rmEmp();break;
 				case 3 : postTimeCard();break;
-				case 4 : break;
+				case 4 : postSalesReceipt();break;
 				case 5 : break;
 				case 6 : break;
 				case 7 : break;

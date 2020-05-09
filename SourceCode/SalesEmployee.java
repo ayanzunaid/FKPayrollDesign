@@ -18,6 +18,10 @@ class SalesEmployee extends SalaryEmployee
 		this.last_ftr_date = last_ftr_date;
 	}
 	
+	float getComm(float sales)
+	{
+		 return (cmr/100.0f)*sales;
+	}
 	void writeToDb()
 	{
 		try{  
