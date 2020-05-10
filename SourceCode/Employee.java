@@ -71,11 +71,11 @@ class Employee
 	}
 	
 	
-	void dailyWageUpdate(float amt , char type)
+	void dailyWageUpdate(float amt , char type , String date , int wd)
 	{
 		
-		Calendar cal = Calendar.getInstance(); 
-        java.sql.Timestamp timestamp = new java.sql.Timestamp(cal.getTimeInMillis());
+		
+        java.sql.Date datex =  java.sql.Date.valueOf(date);
 		
 		try{  
 			//Class.forName("com.mysql.jdbc.Driver");  
@@ -88,8 +88,8 @@ class Employee
 			// create the mysql insert preparedstatement
 			  PreparedStatement preparedStmt = con.prepareStatement(query);
 			  preparedStmt.setString (1, emp_id);
-			  preparedStmt.setTimestamp (2,timestamp);
-			  preparedStmt.setInt   (3, cal.get(Calendar.DAY_OF_WEEK) );
+			  preparedStmt.setDate (2, datex);
+			  preparedStmt.setInt   (3, wd );
 			  preparedStmt.setFloat(4, amt);
 			  preparedStmt.setString  (5, Character.toString(type));
 			 
@@ -104,6 +104,9 @@ class Employee
 		
 		
 	}
+	
+	
+	
 	
 	
 	

@@ -1,5 +1,5 @@
 import java.util.*;  
-
+//java -classpath .;C:\Users\HP\Desktop\JP\mysql-connector-java-8.0.20.jar CMain
 class CMain{
 	
 	private static Scanner sc;
@@ -105,8 +105,15 @@ class CMain{
             else 
 			{
 				float amount = x.dailyWage(hrs);
+				System.out.println("Enter Date(yyyy-mm-dd) :");
+				sc = new Scanner(System.in);
+				String date= sc.nextLine();
 				
-				x.dailyWageUpdate(amount,'D');
+				System.out.println("Enter WeekDay:");
+				sc = new Scanner(System.in);
+				int wd = sc.nextInt();
+				
+				x.dailyWageUpdate(amount,'D' ,date , wd);
 				System.out.println("Done\n");
 			}				
 
@@ -132,8 +139,16 @@ class CMain{
 		if (sals < 0.0f)
 			 System.out.println("Invalid Amount Aborting....\n");
 		 else
-		 {
-			 x.dailyWageUpdate(x.getComm(sals),'D');
+		 {   
+	         System.out.println("Enter Date(yyyy-mm-dd) :");
+							sc = new Scanner(System.in);
+							String date= sc.nextLine();
+				
+							System.out.println("Enter WeekDay:");
+							sc = new Scanner(System.in);
+							int wd = sc.nextInt();
+							
+			 x.dailyWageUpdate(x.getComm(sals),'D' , date , wd);
 				System.out.println("Done\n");
 			 
 		 }
@@ -151,6 +166,15 @@ class CMain{
 		System.out.println("Enter Employee ID :");
 		sc = new Scanner(System.in);
 		String empid = sc.nextLine();
+		System.out.println("Enter Date(yyyy-mm-dd) :");
+							sc = new Scanner(System.in);
+							String date= sc.nextLine();
+				
+							System.out.println("Enter WeekDay:");
+							sc = new Scanner(System.in);
+							int wd = sc.nextInt();
+		
+		
 		DWEmployee x = DWEmployee.findEmp(empid);
 		SalaryEmployee y = SalaryEmployee.findEmp(empid);
 		SalesEmployee z = SalesEmployee.findEmp(empid);
@@ -166,8 +190,10 @@ class CMain{
 						System.out.println("Invalid Amount Aborting....\n");
 					}
 					else{
-				  x.dailyWageUpdate(-1.0f*sv , 'S' );
-				  System.out.println("DONE\n");
+						    
+						
+							x.dailyWageUpdate(-1.0f*sv , 'S' ,date , wd);
+							System.out.println("DONE\n");
 					}
 				}
 				
@@ -188,7 +214,7 @@ class CMain{
 						System.out.println("Invalid Amount Aborting....\n");
 					}
 					else{
-				  y.dailyWageUpdate(-1.0f*sv , 'S' );
+				  y.dailyWageUpdate(-1.0f*sv , 'S' ,date , wd );
 				  System.out.println("DONE\n");
 					}				  
 				}
@@ -210,7 +236,7 @@ class CMain{
 						System.out.println("Invalid Amount Aborting....\n");
 					}
 					else{
-				  z.dailyWageUpdate(-1.0f*sv , 'S' );
+				  z.dailyWageUpdate(-1.0f*sv , 'S' ,date , wd);
 				  System.out.println("DONE\n");	
 					}
 				}
@@ -384,6 +410,186 @@ class CMain{
 		
         		
 	}
+	
+	
+	private static void runPayroll()
+	{
+		System.out.println("Enter Employee ID :");
+		sc = new Scanner(System.in);
+		String empid = sc.nextLine();
+		
+		DWEmployee x = DWEmployee.findEmp(empid);
+		SalaryEmployee y = SalaryEmployee.findEmp(empid);
+		SalesEmployee z = SalesEmployee.findEmp(empid);
+		if (x!=null)
+		{  
+	       ArrayList<DailyTrans> arrD = DailyTrans.getTrans(empid , x.last_tr_date ,'D');
+		   
+	       DailyTrans lfr = DailyTrans.getLastFriday(arrD);
+		   
+	        if (arrD.size() == 0 || lfr == null)
+				{
+					 System.out.println("PAYOUT : 0 No credits so far \n");
+				}
+			else
+			{
+				float payout = 0.0f;
+				ArrayList<DailyTrans> arrS = DailyTrans.getTrans(empid , x.last_tr_date ,'S');
+				if (arrS.size() != 0 )
+				{	
+					for (DailyTrans dt : arrS)
+					{   if (dt.d_date.compareTo(lfr.d_date)<=0)
+						payout += dt.amt;
+					}
+				}
+				for (DailyTrans dt : arrD)
+					{    if (dt.d_date.compareTo(lfr.d_date) <=0)
+						payout += dt.amt;
+					}
+				
+				if (payout <= 0.0f)
+				System.out.println("PAYOUT : 0 MORE DEBIT THAN CREDIT");
+			    else 
+				{
+				 System.out.println("PAYOUT : " + payout);
+				 
+			     x.updateLastTrDate(lfr.d_date);
+			     System.out.println("DONE");
+				}
+				
+		    }
+		}
+		else if (y !=null)
+		{   float sall = 0.0f;
+	        ArrayList<DailyTrans> arrS = DailyTrans.getTrans(empid ,y.last_mtr_date ,'S');
+			Date lmtr = y.getLastMonthDay();
+			if (y.last_mtr_date == null)
+			{
+				
+				sall = y.sl;
+				}
+		  
+	  
+			  else
+			  {
+				  
+				  Calendar startCalendar = new GregorianCalendar();
+					startCalendar.setTime(y.last_mtr_date);
+					Calendar endCalendar = new GregorianCalendar();
+					endCalendar.setTime(lmtr);
+
+					int diffYear = endCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR);
+					int diffMonth = diffYear * 12 + endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
+					
+				   sall = (float)diffMonth*y.sl;
+				   
+			  }
+			  
+			  y.updateLastMonthDay(lmtr,"salaryemployee");
+			  
+              
+				if (arrS.size() != 0 )
+				{	
+					for (DailyTrans dt : arrS)
+					{   if (dt.d_date.compareTo(lmtr)<=0)
+						sall += dt.amt;
+					}
+				}		
+				
+			  if (sall <= 0.0f)	
+              System.out.println("PAYOUT : 0 MORE DEBIT THAN CREDIT / NO CREDIT");
+		      else 
+			  System.out.println("PAYOUT : " + sall);
+		  
+				
+			  System.out.println("DONE\n");
+		}
+		else if (z!=null)
+		{    float sall = 0.0f;
+	          ArrayList<DailyTrans> arrD = DailyTrans.getTrans(empid , z.last_ftr_date ,'D');
+		      
+		  
+				DailyTrans lfr = DailyTrans.getLastFriday(arrD);
+				
+				
+				Date lmtr = z.getLastMonthDay();
+				
+				if (z.last_mtr_date == null)	
+				   sall = z.sl;
+		  
+	  
+			  else
+			  {
+				  
+				  Calendar startCalendar = new GregorianCalendar();
+					startCalendar.setTime(z.last_mtr_date);
+					Calendar endCalendar = new GregorianCalendar();
+					endCalendar.setTime(lmtr);
+
+					int diffYear = endCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR);
+					int diffMonth = diffYear * 12 + endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
+					
+				   sall = (float)diffMonth*y.sl;
+				   
+			  }
+			  
+			  
+			  
+			 if (lfr != null)
+			 {				 
+			 for (DailyTrans dt : arrD)
+					{    if (dt.d_date.compareTo(lfr.d_date) <=0)
+						sall += dt.amt;
+					}
+					
+			 }
+			 
+			 Date cutoff;
+			 if (z.last_ftr_date == null && z.last_mtr_date == null)
+				  cutoff = null;
+			  else if (z.last_mtr_date == null)
+				   cutoff = z.last_ftr_date;
+			  else if (z.last_ftr_date == null)
+				   cutoff = z.last_mtr_date;
+			   else 
+			   {
+				    cutoff = z.last_mtr_date.compareTo(z.last_ftr_date) >=0 ? z.last_mtr_date : z.last_ftr_date;
+			   }
+			   
+			 ArrayList<DailyTrans> arrS = DailyTrans.getTrans(empid , cutoff,'S');
+															  
+			 if (arrS.size() != 0 )
+				{	 if (lfr != null)
+			        cutoff = lmtr.compareTo(lfr.d_date) >= 0? lmtr : lfr.d_date;
+			        else 
+						cutoff = lmtr;
+					
+					for (DailyTrans dt : arrS)
+					{   if (dt.d_date.compareTo(cutoff)<=0)
+						sall += dt.amt;
+					}
+				}	
+			 
+			 if (sall <=0.0f)
+			 {   System.out.println("PAYOUT : 0 MORE DEBIT THAN CREDIT / NO CREDIT"); }
+		     else 
+			 {
+				 System.out.println("PAYOUT : "  + sall);
+                 z.updateLastMonthDay(lmtr , "salesemployee");
+				 if (lfr != null)
+					  z.updateLastFriday(lfr.d_date);
+				  System.out.println("Done\n");
+ 			 }
+				
+			
+		}
+		else 
+	    {
+			System.out.println("Invalid Employee ID \n");
+		}
+		
+		
+	}
 	public static void main(String [] args)
 	{
 		
@@ -410,7 +616,7 @@ class CMain{
 				case 4 : postSalesReceipt();break;
 				case 5 : postServiceCharge();break;
 				case 6 : editDetails();break;
-				case 7 : break;
+				case 7 : runPayroll();break;
 				
 			};
 			
