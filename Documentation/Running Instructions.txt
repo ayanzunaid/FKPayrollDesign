@@ -1,0 +1,12 @@
+1. cd to Source Code Directory
+
+2. compile using :
+   javac Employee.java
+   javac DWEmployee.java
+   javac SalaryEmployee.java
+   javac SalesEmployee.java
+   javac DailyTrans.java
+   javac CMain.java
+   
+3. Run using :  java -classpath .;<path to JDBC connector> Cmain
+
